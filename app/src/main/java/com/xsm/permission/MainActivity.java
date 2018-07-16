@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.xsm.lib_permission.annotation.PermissionCanceled;
+import com.xsm.lib_permission.annotation.PermissionDenied;
 import com.xsm.lib_permission.annotation.PermissionRequest;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +26,17 @@ public class MainActivity extends AppCompatActivity {
     @PermissionRequest(value = {Manifest.permission.CAMERA})
     public void test() {
         Toast.makeText(this, "申请成功", Toast.LENGTH_SHORT).show();
+    }
+
+    @PermissionDenied()
+    public void denied() {
+        Toast.makeText(this, "用户拒绝了权限的申请", Toast.LENGTH_SHORT).show();
+    }
+
+    @PermissionCanceled()
+    public void cancel() {
+        Toast.makeText(this, "用户取消了权限的申请", Toast.LENGTH_SHORT).show();
+
     }
 
 }

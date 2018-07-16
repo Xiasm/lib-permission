@@ -55,7 +55,6 @@ public class PermissionAspect {
             return;
         }
 
-        final Context finalContext = context;
         ProxyPermissionActivity.requestUserPermission(context, permissionRequest.value(), permissionRequest.requestCode(), new IPermission() {
             @Override
             public void ganted() {
@@ -74,7 +73,6 @@ public class PermissionAspect {
             @Override
             public void denied() {
                 PermissionUtils.invokAnnotation(o, PermissionDenied.class);
-                PermissionUtils.goToDeviceSetting(finalContext);
             }
         });
 
