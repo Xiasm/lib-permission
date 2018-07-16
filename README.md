@@ -7,7 +7,7 @@
   #### 传统的权限请求方式
   
   ```
-  public void openCamera() {
+    public void openCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Android M Permission check
             if (this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -41,7 +41,7 @@
   ### lib-permission的权限请求方式
   
   ```
-  @PermissionRequest(value = Manifest.permission.CAMERA)
+    @PermissionRequest(value = Manifest.permission.CAMERA)
     public void openCamera(View view) {
         //编写打开相机逻辑
         android.hardware.Camera camera = android.hardware.Camera.open();
@@ -62,4 +62,6 @@
   ```
   采用lib-permission的方式，只需要在打开相机的方法上加上@PermissionRequest注解，然后再写一个方法加上@PermissionDenied()注解，用来接收用户拒绝授权的响应（注意方法需要接收ArrayList<String> permissions参数），一切就ok了。
   当调用到openCamera方法时，lib-permission库会根据@PermissionRequest注解自动检测是否授权，如果用户没有授予过此权限，会弹窗提示用户授权，用户点了允许后会立即执行openCamera()方法，如果用户点击拒绝或不再提示，将自动调用denied()方法。
+  
+  
   
