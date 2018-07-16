@@ -19,6 +19,11 @@ android {
     }
 }
 
+aspectjx {
+    //排除所有package路径中包含`android.support`的class文件及库（jar文件）
+    exclude 'android.support'
+
+}
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
