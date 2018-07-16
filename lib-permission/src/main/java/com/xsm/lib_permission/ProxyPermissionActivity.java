@@ -3,6 +3,7 @@ package com.xsm.lib_permission;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.xsm.lib_permission.core.IPermission;
+
+import java.util.ArrayList;
 
 public class ProxyPermissionActivity extends Activity {
     private static final String TAG = "ProxyPermissionActivity";
@@ -70,17 +73,20 @@ public class ProxyPermissionActivity extends Activity {
             finish();
             return;
         }
+        ArrayList<String> refusedPermissions = new ArrayList<>();
 
-        //用户点击了不再显示
-        if (PermissionUtils.shouldShowRequestPermissionRationale(ProxyPermissionActivity.this, permissions)) {
-            permissionListener.denied();
-            finish();
-            return;
+        if (grantResults == null || permissions == null) {
+            permissionListener.denied(refusedPermissions);
         }
 
-        //用户取消
-        permissionListener.cancled();
+        for (int i = 0; i < grantResults.length; i++) {
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                refusedPermissions.add(permissions[i]);
+            }
+        }
+        permissionListener.denied(refusedPermissions);
         finish();
+
     }
 
     @Override

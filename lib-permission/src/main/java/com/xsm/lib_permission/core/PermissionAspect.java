@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.xsm.lib_permission.PermissionUtils;
 import com.xsm.lib_permission.ProxyPermissionActivity;
-import com.xsm.lib_permission.annotation.PermissionCanceled;
 import com.xsm.lib_permission.annotation.PermissionDenied;
 import com.xsm.lib_permission.annotation.PermissionRequest;
 
@@ -14,6 +13,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+
+import java.util.ArrayList;
 
 /**
  * Author: 夏胜明
@@ -66,13 +67,10 @@ public class PermissionAspect {
             }
 
             @Override
-            public void cancled() {
-                PermissionUtils.invokAnnotation(o, PermissionCanceled.class);
-            }
-
-            @Override
-            public void denied() {
-                PermissionUtils.invokAnnotation(o, PermissionDenied.class);
+            public void denied(ArrayList<String> refusedPermissions) {
+                try {
+                    PermissionUtils.invokAnnotation(o, PermissionDenied.class, refusedPermissions);
+                } catch (Exception e) {}
             }
         });
 

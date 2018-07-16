@@ -19,6 +19,7 @@ import com.xsm.lib_permission.menu.DeviceDefault;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -144,7 +145,7 @@ public class PermissionUtils {
         return false;
     }
 
-    public static void invokAnnotation(Object object, Class annotationClass) {
+    public static void invokAnnotation(Object object, Class annotationClass, ArrayList<String> refusedPermissions) {
         //获取切面上下文的类型
         Class<?> clz = object.getClass();
         //获取类型中的方法
@@ -158,7 +159,12 @@ public class PermissionUtils {
             if (isHasAnnotation) {
                 method.setAccessible(true);
                 try {
-                    method.invoke(object);
+                    Class<?>[] parameterTypes = method.getParameterTypes();
+                    if (parameterTypes.length > 0) {
+                        method.invoke(object, refusedPermissions);
+                    } else {
+                        method.invoke(object);
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {

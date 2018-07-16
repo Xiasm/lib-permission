@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.xsm.permission">
+    <!--
+    LOCATION
+    定位组
+   -->
     <!-- 用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!-- 用于进行网络定位 -->
@@ -19,6 +23,22 @@
     相机拍照组
     -->
     <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!--
+     PHONE
+     电话组
+    -->
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 添加可以向外拨打电话的权限 -->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <!--
+      CONTACTS
+      联系人组
+    -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

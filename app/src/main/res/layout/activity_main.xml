@@ -6,12 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
-        android:onClick="requestPermissions"
-        android:text="申请权限"
+        android:onClick="requestCameraPermissions"
+        android:text="申请相机权限"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:onClick="requestLocationAndWritePermissions"
+        android:text="申请定位和写存储卡权限"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:onClick="requestMorePermissions"
+        android:text="申请多个权限"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

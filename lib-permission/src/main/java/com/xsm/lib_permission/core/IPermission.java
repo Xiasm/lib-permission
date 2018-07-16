@@ -1,5 +1,7 @@
 package com.xsm.lib_permission.core;
 
+import java.util.ArrayList;
+
 /**
  * Author: 夏胜明
  * Date: 2018/7/16 0016
@@ -13,12 +15,7 @@ public interface IPermission {
     void ganted();
 
     /**
-     * 取消授权
+     *被拒绝 点击了不再提示或直接拒绝
      */
-    void cancled();
-
-    /**
-     *被拒绝 点击了不再提示
-     */
-    void denied();
+    void denied(ArrayList<String> refusedPermissions);
 }
