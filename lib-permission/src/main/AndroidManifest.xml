@@ -3,7 +3,8 @@
           package="com.xsm.lib_permission">
 
     <application>
-        <activity android:name=".ProxyPermissionActivity">
+        <activity android:name=".ProxyPermissionActivity"
+                  android:theme="@style/translucent">
         </activity>
     </application>
 
