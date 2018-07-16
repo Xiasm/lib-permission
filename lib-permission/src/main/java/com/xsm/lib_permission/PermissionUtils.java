@@ -109,6 +109,12 @@ public class PermissionUtils {
         return minVersion == null || Build.VERSION.SDK_INT >= minVersion;
     }
 
+    /**
+     * 验证权限是否申请成功
+     * @param context
+     * @param gantedResults
+     * @return
+     */
     public static boolean verifyPermission(Context context, int ... gantedResults) {
         if (gantedResults == null || gantedResults.length == 0 ) {
             return false;
@@ -131,8 +137,6 @@ public class PermissionUtils {
      */
     public static boolean shouldShowRequestPermissionRationale(Activity activity, String... permissions) {
         for (String permission : permissions) {
-            // 这个API主要用于给用户一个申请权限的解释，该方法只有在用户在上一次已经拒绝过你的这个权限申请。
-            // 也就是说，用户已经拒绝一次了，你又弹个授权框，你需要给用户一个解释，为什么要授权，则使用该方法。
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
                 return true;
             }

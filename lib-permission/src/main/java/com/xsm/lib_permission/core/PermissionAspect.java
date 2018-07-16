@@ -4,6 +4,10 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.xsm.lib_permission.PermissionUtils;
+import com.xsm.lib_permission.ProxyPermissionActivity;
+import com.xsm.lib_permission.annotation.PermissionCanceled;
+import com.xsm.lib_permission.annotation.PermissionDenied;
 import com.xsm.lib_permission.annotation.PermissionRequest;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -28,9 +32,9 @@ public class PermissionAspect {
     }
 
     @Around("requestPermission(permissionRequest)")
-    public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, PermissionRequest permission) {
+    public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, PermissionRequest permissionRequest)  throws Throwable {
         Context context = null;
-        Object o = joinPoint.getThis();
+        final Object o = joinPoint.getThis();
         if (o instanceof Context) {
             context = (Context) o;
         } else if (o instanceof android.support.v4.app.Fragment) {
@@ -39,8 +43,6 @@ public class PermissionAspect {
         } else if (o instanceof android.app.Fragment) {
             android.app.Fragment fragment = (android.app.Fragment) o;
             context = fragment.getActivity();
-        } else {
-
         }
 
         if (context == null) {
@@ -48,12 +50,33 @@ public class PermissionAspect {
             return;
         }
 
-        if (permission == null) {
+        if (permissionRequest == null) {
             Log.d(TAG, "aroundJoinPoint: error not PermissionRequest");
             return;
         }
 
+        final Context finalContext = context;
+        ProxyPermissionActivity.requestUserPermission(context, permissionRequest.value(), permissionRequest.requestCode(), new IPermission() {
+            @Override
+            public void ganted() {
+                try {
+                    joinPoint.proceed();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            }
 
+            @Override
+            public void cancled() {
+                PermissionUtils.invokAnnotation(o, PermissionCanceled.class);
+            }
+
+            @Override
+            public void denied() {
+                PermissionUtils.invokAnnotation(o, PermissionDenied.class);
+                PermissionUtils.goToDeviceSetting(finalContext);
+            }
+        });
 
     }
 }
