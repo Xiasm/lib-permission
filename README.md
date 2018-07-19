@@ -160,7 +160,7 @@ public void denied(ArrayList<String> permissions) {
 ### 支持环境
 
 AspectJX是基于 gradle android插件1.5及以上版本设计使用的，如果你还在用1.3或者更低版本，请把版本升上去。
-已知bug：在AndroidStudio 3.1.3和gradle4.4环境下可能会遇到编译报错，原因可能是与其他插件冲突，我会尽快修复。
+已知bug：在gradle4.4环境下可能会遇到编译报错，原因可能是与其他插件冲突，我会尽快修复。
 
 
 ### 感谢
