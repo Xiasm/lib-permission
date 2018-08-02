@@ -58,7 +58,7 @@ public class PermissionAspect {
 
         ProxyPermissionActivity.requestUserPermission(context, permissionRequest.value(), permissionRequest.requestCode(), new IPermission() {
             @Override
-            public void ganted() {
+            public void ganted(int requestCode) {
                 try {
                     joinPoint.proceed();
                 } catch (Throwable throwable) {
@@ -67,9 +67,9 @@ public class PermissionAspect {
             }
 
             @Override
-            public void denied(ArrayList<String> refusedPermissions) {
+            public void denied(int requestCode, ArrayList<String> refusedPermissions) {
                 try {
-                    PermissionUtils.invokAnnotation(o, PermissionDenied.class, refusedPermissions);
+                    PermissionUtils.invokAnnotation(o, PermissionDenied.class, requestCode, refusedPermissions);
                 } catch (Exception e) {}
             }
         });

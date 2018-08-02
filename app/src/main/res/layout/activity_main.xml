@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
     <Button
         android:onClick="requestCameraPermissions"
         android:text="申请相机权限"

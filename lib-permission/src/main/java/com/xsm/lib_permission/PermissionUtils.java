@@ -2,7 +2,6 @@ package com.xsm.lib_permission;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -145,7 +144,7 @@ public class PermissionUtils {
         return false;
     }
 
-    public static void invokAnnotation(Object object, Class annotationClass, ArrayList<String> refusedPermissions) {
+    public static void invokAnnotation(Object object, Class annotationClass, int requestCode, ArrayList<String> refusedPermissions) {
         //获取切面上下文的类型
         Class<?> clz = object.getClass();
         //获取类型中的方法
@@ -159,20 +158,53 @@ public class PermissionUtils {
             if (isHasAnnotation) {
                 method.setAccessible(true);
                 try {
-                    Class<?>[] parameterTypes = method.getParameterTypes();
-                    if (parameterTypes.length > 0) {
-                        method.invoke(object, refusedPermissions);
-                    } else {
-                        method.invoke(object);
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    methodInvoke(method, object, requestCode, refusedPermissions);
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
+                return;
             }
         }
     }
+
+    private static void methodInvoke(Method method, Object object, int requestCode, ArrayList<String> refusedPermissions) throws InvocationTargetException, IllegalAccessException {
+        Class<?>[] parameterClazz = method.getParameterTypes();
+        if (parameterClazz == null) {
+            method.invoke(object);
+        }
+        else if (parameterClazz.length == 0) {
+            method.invoke(object);
+        }
+        else if (parameterClazz.length == 1) {
+            String paramTypeName = parameterClazz[0].getName();
+            if ("java.lang.Integer".equals(paramTypeName) || "int".equals(paramTypeName)){
+                method.invoke(object, requestCode);
+            } else if ("java.util.ArrayList".equals(paramTypeName) || "java.util.List".equals(paramTypeName)) {
+                method.invoke(object, refusedPermissions);
+            } else {
+                method.invoke(object);
+            }
+        } else if (parameterClazz.length == 2) {
+            String paramTypeName1 = parameterClazz[0].getName();
+            String paramTypeName2 = parameterClazz[1].getName();
+
+            if (("java.lang.Integer".equals(paramTypeName1) || "int".equals(paramTypeName1))
+                    && ("java.util.ArrayList".equals(paramTypeName2) || "java.util.List".equals(paramTypeName2))) {
+                method.invoke(object, requestCode, refusedPermissions);
+            } else if (("java.lang.Integer".equals(paramTypeName2) || "int".equals(paramTypeName2))
+                    && ("java.util.ArrayList".equals(paramTypeName1) || "java.util.List".equals(paramTypeName1))) {
+                method.invoke(object, refusedPermissions, requestCode);
+            } else {
+                method.invoke(object);
+            }
+        } else {
+            method.invoke(object);
+        }
+
+    }
+
 
     /**
      * 跳转到厂商权限设置页面

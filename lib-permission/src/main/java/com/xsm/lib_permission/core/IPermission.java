@@ -12,10 +12,10 @@ public interface IPermission {
     /**
      * 已经授权
      */
-    void ganted();
+    void ganted(int requestCode);
 
     /**
      *被拒绝 点击了不再提示或直接拒绝
      */
-    void denied(ArrayList<String> refusedPermissions);
+    void denied(int requestCode, ArrayList<String> refusedPermissions);
 }

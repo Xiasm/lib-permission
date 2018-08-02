@@ -50,7 +50,7 @@ public class ProxyPermissionActivity extends Activity {
 
         //检查是否已授权
         if (PermissionUtils.hasPermission(ProxyPermissionActivity.this, mPermissions)) {
-            permissionListener.ganted();
+            permissionListener.ganted(mRequestCode);
             finish();
             return;
         }
@@ -69,14 +69,14 @@ public class ProxyPermissionActivity extends Activity {
 
         //请求权限成功
         if (PermissionUtils.verifyPermission(ProxyPermissionActivity.this, grantResults)) {
-            permissionListener.ganted();
+            permissionListener.ganted(mRequestCode);
             finish();
             return;
         }
         ArrayList<String> refusedPermissions = new ArrayList<>();
 
         if (grantResults == null || permissions == null) {
-            permissionListener.denied(refusedPermissions);
+            permissionListener.denied(mRequestCode, refusedPermissions);
         }
 
         for (int i = 0; i < grantResults.length; i++) {
@@ -84,7 +84,7 @@ public class ProxyPermissionActivity extends Activity {
                 refusedPermissions.add(permissions[i]);
             }
         }
-        permissionListener.denied(refusedPermissions);
+        permissionListener.denied(mRequestCode, refusedPermissions);
         finish();
 
     }
